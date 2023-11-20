@@ -31,8 +31,8 @@ const HorasExtrasProvider = ({ children }) => {
         }
 
         const {data} = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/horasextras`, config);
-        setHoras(data, ...horas)
-        // console.log(data);
+        setHoras(data)
+        
       } catch (error) {
         console.log(error);
       }
@@ -65,8 +65,9 @@ const HorasExtrasProvider = ({ children }) => {
         "Ya puedes visualizar tu nueva hora extra registrada",
         "success"
       );
-      
+      console.log(data);
       setTimeout(() => {
+        console.log(data);
         navigate("/horas-extras");
       }, 1000);
     } catch (error) {

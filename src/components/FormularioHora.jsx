@@ -10,31 +10,31 @@ import Alert from "./Alert.jsx";
 function FormularioHora() {
   const [asunto, setAsunto] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [horaInicial, setHoraInicial] = useState("");
-  const [horaFinal, setHoraFinal] = useState("");
+  const [fechaHoraInicio, setFechaHoraInicio] = useState("");
+  const [fechaHoraFin, setFechaHoraFin] = useState("");
 
   const { mostrarAlerta, alerta, submitHoras } = useHorasExtras(); //Usamos el Context de Horas Extras el cual es HorasExtrasProvider
   
 
   const handleHoraInicialChange = (hora) => {
-    setHoraInicial(dayjs(hora.$d).format("YYYY-MM-DD HH:mm:ss"));
+    setFechaHoraInicio(dayjs(hora.$d).format("YYYY-MM-DDTHH:mm:ssZ"));
   };
   const handleHoraFinalChange = (hora) => {
-    setHoraFinal(dayjs(hora.$d).format("YYYY-MM-DD HH:mm:ss"));
+    setFechaHoraFin(dayjs(hora.$d).format("YYYY-MM-DDTHH:mm:ssZ"));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if ([asunto, descripcion, horaInicial, horaFinal].includes("")) {
+    if ([asunto, descripcion, fechaHoraInicio, fechaHoraFin].includes("")) {
       mostrarAlerta({
         msg: "Todos los campos son obligatorios",
         error: true
       })
       return;
     }
-    await submitHoras({asunto, descripcion, horaInicial, horaFinal})
-    
+
+    await submitHoras({asunto, descripcion, fechaHoraInicio, fechaHoraFin})
   };
 
   const { msg } = alerta;
