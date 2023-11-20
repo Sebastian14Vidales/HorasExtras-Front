@@ -1,0 +1,16 @@
+.principal {
+    background-color: #FFF;
+    position: relative;
+}
+
+.btn-login:hover {
+    background-color: var(--hover);
+}
+
+.title-welcome {
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--primary);
+}

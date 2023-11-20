@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: #2b0572;
+    --hover: #4411a3;
+}
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    border-width: 0;
+    border-color:transparent;
+}
