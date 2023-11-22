@@ -10,6 +10,7 @@ import NewPassword from "./paginas/NewPassword";
 import ConfirmAccount from "./paginas/ConfirmAccount";
 import HorasExtras from "./paginas/HorasExtras";
 import RegistrarHoraExtra from "./paginas/RegistrarHoraExtra";
+import ModalVerRegistro from "./paginas/ModalVerRegistro";
 
 import { AuthProvider } from "./context/AuthProvider";
 import { HorasExtrasProvider } from "./context/HorasExtrasProvider";
@@ -32,6 +33,7 @@ function App() {
             <Route path="/horas-extras" element={<RutaProtegida />}>
               <Route index element={<HorasExtras />} />
               <Route path="crear-hora-extra" element={<RegistrarHoraExtra />} />
+              <Route path=":id" element={<ModalVerRegistro />} />
             </Route>
           </Routes>
         </HorasExtrasProvider>

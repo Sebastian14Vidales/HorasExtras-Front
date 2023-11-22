@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs"; // Importa la librería Day.js
 
 import { Button, Input, Textarea } from "@nextui-org/react";
@@ -12,6 +12,7 @@ function FormularioHora() {
   const [descripcion, setDescripcion] = useState("");
   const [fechaHoraInicio, setFechaHoraInicio] = useState("");
   const [fechaHoraFin, setFechaHoraFin] = useState("");
+  const [horasTotal, setHorasTotal] = useState(0);
 
   const { mostrarAlerta, alerta, submitHoras } = useHorasExtras(); //Usamos el Context de Horas Extras el cual es HorasExtrasProvider
   
@@ -23,6 +24,24 @@ function FormularioHora() {
     setFechaHoraFin(dayjs(hora.$d).format("YYYY-MM-DDTHH:mm:ssZ"));
   };
 
+  const diferenciaHoras = (fin, inicio) => {
+    const diferencia = dayjs(fin).diff(dayjs(inicio), "hours", true);
+    const decimal = diferencia - Math.floor(diferencia); // Obtiene la parte decimal
+
+    if (decimal >= 0.5) {
+      return Math.ceil(diferencia);
+    } else {
+      return Math.floor(diferencia);
+    }
+  };
+
+  useEffect(() => {
+    if(fechaHoraInicio && fechaHoraFin) {
+      setHorasTotal(diferenciaHoras(fechaHoraFin, fechaHoraInicio));
+      console.log(horasTotal);
+    }
+  }, [fechaHoraInicio, fechaHoraFin])
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -33,8 +52,8 @@ function FormularioHora() {
       })
       return;
     }
-
-    await submitHoras({asunto, descripcion, fechaHoraInicio, fechaHoraFin})
+    console.log("await: ", horasTotal);
+    await submitHoras({asunto, descripcion, fechaHoraInicio, fechaHoraFin, horasTotal})
   };
 
   const { msg } = alerta;

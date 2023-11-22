@@ -8,7 +8,7 @@ const HorasExtrasContext = createContext();
 
 const HorasExtrasProvider = ({ children }) => {
   const [horas, setHoras] = useState([]);
-  const [alerta, setAlerta] = useState([]);
+  const [alerta, setAlerta] = useState({});
 
   const mostrarAlerta = (alerta) => {
     setAlerta(alerta);
@@ -44,6 +44,7 @@ const HorasExtrasProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const submitHoras = async (hora) => {
+    
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -60,14 +61,13 @@ const HorasExtrasProvider = ({ children }) => {
         hora,
         config
       );
+      setHoras([...horas, data])
       Swal.fire(
         "Se creó correctamente",
         "Ya puedes visualizar tu nueva hora extra registrada",
         "success"
       );
-      console.log(data);
       setTimeout(() => {
-        console.log(data);
         navigate("/horas-extras");
       }, 1000);
     } catch (error) {
