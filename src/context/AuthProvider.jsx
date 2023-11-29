@@ -1,6 +1,6 @@
 import { useEffect, useState, createContext } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -8,6 +8,10 @@ const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
   const [cargando, setCargando] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation(); // Obtener la ubicación actual
+
+  // Extraer el pathname de la ubicación actual
+  const { pathname } = location;
 
   useEffect(() => {
     const autenticarUsuario = async () => {
@@ -16,7 +20,7 @@ const AuthProvider = ({ children }) => {
         setCargando(false);
         return;
       }
-      console.log('SI HAY TOKEN');
+      console.log("SI HAY TOKEN");
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -28,12 +32,20 @@ const AuthProvider = ({ children }) => {
           `${import.meta.env.VITE_BACKEND_URL}/usuarios/perfil`,
           config
         );
-        
+
         setAuth(data);
-        navigate("/horas-extras")
-        
+        const rutas = [
+          "/",
+          "/register",
+          "/forgot-password",
+          "/confirm",
+          "horas-extras",
+        ];
+        if (rutas.includes(pathname)) {
+          navigate("/horas-extras");
+        }
       } catch (error) {
-        setAuth({})
+        setAuth({});
       }
       setCargando(false);
     };

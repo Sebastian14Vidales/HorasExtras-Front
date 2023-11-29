@@ -9,6 +9,8 @@ const HorasExtrasContext = createContext();
 const HorasExtrasProvider = ({ children }) => {
   const [horas, setHoras] = useState([]);
   const [alerta, setAlerta] = useState({});
+  const [hora, setHora] = useState({});
+  const [cargando, setCargando] = useState(false);
 
   const mostrarAlerta = (alerta) => {
     setAlerta(alerta);
@@ -75,6 +77,29 @@ const HorasExtrasProvider = ({ children }) => {
     }
   };
 
+  const obtenerHora = async id => {
+    setCargando(true);
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const {data} = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/horasextras/${id}`, config);
+      setHora(data)
+      
+    } catch (error) {
+      console.log(error);
+    }
+
+    setCargando(false)
+  }
+
   return (
     <HorasExtrasContext.Provider
       value={{
@@ -82,6 +107,9 @@ const HorasExtrasProvider = ({ children }) => {
         mostrarAlerta,
         alerta,
         submitHoras,
+        hora,
+        obtenerHora,
+        cargando
       }}
     >
       {children}

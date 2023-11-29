@@ -1,12 +1,12 @@
 import { Outlet, Navigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
+import Cargando from "../components/Cargando";
 
 function RutaProtegida() {
   const { auth, cargando } = useAuth();
-  if (cargando) return "Cargando...";
+  if (cargando) return <Cargando />;
   return (
     <>
       {auth._id ? (
@@ -20,10 +20,10 @@ function RutaProtegida() {
               <Outlet />
             </main>
           </div>
-
+{/* 
           <div>
             <Footer />
-          </div>
+          </div> */}
         </div>
       ) : (
         <Navigate to="/" />
