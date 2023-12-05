@@ -23,7 +23,7 @@ function ModalVerRegistro({
 }) {
   return (
     <>
-      <Modal backdrop="opaque" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal className="flex-column" backdrop="opaque" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>

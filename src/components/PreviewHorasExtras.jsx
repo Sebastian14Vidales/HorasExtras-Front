@@ -1,9 +1,9 @@
 import React from "react";
 import dayjs from "dayjs";
-import { Link } from "react-router-dom";
 import "../styles/horasExtras.css";
 import ModalVerRegistro from "./ModalVerRegistro";
 import { Button, useDisclosure } from "@nextui-org/react";
+import useHorasExtras from "../hooks/useHorasExtras";
 
 function PreviewHorasExtras({ horas }) {
   const {
@@ -15,7 +15,14 @@ function PreviewHorasExtras({ horas }) {
     _id,
   } = horas;
 
+  const { eliminarHora } = useHorasExtras();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const handleClick =  () => {
+    if(confirm('Deseas eliminar este proyecto')) {
+      eliminarHora(_id)
+    } 
+  }
 
   return (
     <div className="bg-white shadow-md mt-5 rounded-lg p-5">
@@ -47,12 +54,19 @@ function PreviewHorasExtras({ horas }) {
             </p>
           </div>
         </div>
-        <div className="flex justify-center items-center text-center">
-          <Button className="font-bold" onPress={onOpen} color="warning" variant="shadow">
+        <div className="flex flex-col gap-2 justify-center mt-4 xl:mt-0 text-center">
+          <Button
+            className="font-bold"
+            onPress={onOpen}
+            color="warning"
+            variant="shadow"
+          >
             Ver Registro
           </Button>
 
-          {/* <Link className="btn btn-eliminar px-6 py-2">Eliminar</Link>  */}
+          <Button className="font-bold" color="danger" variant="shadow" onPress={handleClick}>
+            Eliminar
+          </Button>
         </div>
       </div>
       <ModalVerRegistro

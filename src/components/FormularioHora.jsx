@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import dayjs from "dayjs"; // Importa la librería Day.js
-import utc from "dayjs/plugin/utc.js"
-import timezone from "dayjs/plugin/timezone.js"
 import { Button, Input, Textarea } from "@nextui-org/react";
 import DateTimePickerView from "./DateTimePickerView.jsx";
 
@@ -10,18 +8,13 @@ import Alert from "./Alert.jsx";
 import { useParams } from "react-router-dom";
 
 function FormularioHora() {
-
-  dayjs.extend(utc); 
-  dayjs.extend(timezone);
-
   const params = useParams();
   const { mostrarAlerta, alerta, submitHoras, hora } = useHorasExtras(); //Usamos el Context de Horas Extras el cual es HorasExtrasProvider
   const [asunto, setAsunto] = useState(params.id ? hora.asunto : "");
-  const [descripcion, setDescripcion] = useState(
-    params.id ? hora.descripcion : ""
-  );
-  const [fechaHoraInicio, setFechaHoraInicio] = useState(params.id ? dayjs(hora.fechaHoraInicio).format() : "");
-  const [fechaHoraFin, setFechaHoraFin] = useState(params.id ? dayjs(hora.fechaHoraFin).format() : "");
+  const [descripcion, setDescripcion] = useState( params.id ? hora.descripcion : "");
+  const [fechaHoraInicio, setFechaHoraInicio] = useState( params.id ? dayjs(hora.fechaHoraInicio).format() : "");
+  const [fechaHoraFin, setFechaHoraFin] = useState( params.id ? dayjs(hora.fechaHoraFin).format() : "");
+  const [id, setId] = useState( params.id ? hora._id : hora._id);
   const [horasTotal, setHorasTotal] = useState(0);
 
   const handleHoraInicialChange = (hora) => {
@@ -45,7 +38,7 @@ function FormularioHora() {
   useEffect(() => {
     if (fechaHoraInicio && fechaHoraFin) {
       setHorasTotal(diferenciaHoras(fechaHoraFin, fechaHoraInicio));
-      console.log(horasTotal);
+      
     }
   }, [fechaHoraInicio, fechaHoraFin]);
 
@@ -59,14 +52,19 @@ function FormularioHora() {
       });
       return;
     }
-    console.log("await: ", horasTotal);
+    
     await submitHoras({
+      id,
       asunto,
       descripcion,
       fechaHoraInicio,
       fechaHoraFin,
       horasTotal,
     });
+    setAsunto("");
+    setDescripcion("");
+    setFechaHoraInicio("");
+    setFechaHoraFin("");
   };
 
   const { msg } = alerta;
@@ -133,13 +131,16 @@ function FormularioHora() {
           Fecha y Hora Final
         </label>
 
-        <DateTimePickerView dateTime={fechaHoraFin} onChangeDateTime={handleHoraFinalChange} />
+        <DateTimePickerView
+          dateTime={fechaHoraFin}
+          onChangeDateTime={handleHoraFinalChange}
+        />
       </div>
       <Button
         type="submit"
         className="bg-[#2b0572] btn-login w-full rounded-3xl text-white transition-all uppercase font-bold duration-300 mt-6"
       >
-        Registrar Hora Extra
+        {id ? "Actualizar Hora Extra" : "Registrar Hora Extra"}
       </Button>
     </form>
   );

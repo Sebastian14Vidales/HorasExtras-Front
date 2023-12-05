@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
         setCargando(false);
         return;
       }
-      console.log("SI HAY TOKEN");
+      // console.log("SI HAY TOKEN");
       const config = {
         headers: {
           "Content-Type": "application/json",
