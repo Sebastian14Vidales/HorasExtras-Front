@@ -1,8 +1,21 @@
 import { Button } from "@nextui-org/react";
 import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import useHorasExtras from "../hooks/useHorasExtras";
 
 function Header() {
-  const { auth } = useAuth();
+  const { auth, cerrarSesionAuth } = useAuth();
+  const { cerrarSesionHoras } = useHorasExtras();
+  const navigate = useNavigate();
+
+  const handleCerrarSesion = () => {
+    console.log('Cerrando Sesión');
+    cerrarSesionAuth();
+    cerrarSesionHoras();
+    localStorage.removeItem("token");
+    // navigate("/");
+  }
+
   return (
     <header className="px-4 py-5 bg-white border-b">
       <div className="md:flex md:justify-between">
@@ -18,7 +31,7 @@ function Header() {
 
         <div className="flex items-center gap-4">
         <p className="text-xl font-bold">Hola {auth.nombre}</p>
-          <Button className="bg-[#2b0572] text-white uppercase font-bold">
+          <Button onPress={handleCerrarSesion} className="bg-[#2b0572] text-white uppercase font-bold">
             Cerrar Sesión
           </Button>
         </div>

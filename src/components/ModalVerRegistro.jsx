@@ -9,6 +9,7 @@ import {
 } from "@nextui-org/react";
 import dayjs from "dayjs";
 
+
 // import { useState, useEffect } from "react";
 
 function ModalVerRegistro({
@@ -21,9 +22,15 @@ function ModalVerRegistro({
   horasTotal,
   _id,
 }) {
+  
   return (
     <>
-      <Modal className="flex-column" backdrop="opaque" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        className="flex-column"
+        backdrop="opaque"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           {(onClose) => (
             <>
@@ -46,7 +53,8 @@ function ModalVerRegistro({
                 </p>
                 <div className="text-center mt-2">
                   <p className="uppercase text-lg font-bold text-[#2b0572]">
-                    Horas trabajadas: <span className="block text-4xl">{horasTotal}</span>
+                    Horas trabajadas:{" "}
+                    <span className="block text-4xl">{horasTotal}</span>
                   </p>
                 </div>
               </ModalBody>
@@ -54,7 +62,10 @@ function ModalVerRegistro({
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Link to={`/horas-extras/editar/${_id}`} className="btn btn-editar px-6 py-2">
+                <Link
+                  to={`/horas-extras/editar/${_id}`}
+                  className="btn btn-editar px-6 py-2"
+                >
                   Editar
                 </Link>
               </ModalFooter>

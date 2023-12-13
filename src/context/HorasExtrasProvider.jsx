@@ -3,16 +3,20 @@ import axios from "axios";
 import { useState, useEffect, createContext } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+
 // import dayjs from "dayjs";
 
 const HorasExtrasContext = createContext();
 
 const HorasExtrasProvider = ({ children }) => {
   const [horas, setHoras] = useState([]);
+  const [TodasHorasExtras, setTodasHorasExtras] = useState([]);
   const [alerta, setAlerta] = useState({});
   const [hora, setHora] = useState({});
   const [cargando, setCargando] = useState(false);
 
+  const { auth } = useAuth();
   const navigate = useNavigate();
 
   const mostrarAlerta = (alerta) => {
@@ -47,7 +51,34 @@ const HorasExtrasProvider = ({ children }) => {
     };
 
     obtenerHorasExtras();
-  }, []);
+  }, [auth]);
+
+  useEffect(() => {
+    const obtenerTodasHorasExtras = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/horasextras/alluser`,
+          config
+        );
+        setTodasHorasExtras(data);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    obtenerTodasHorasExtras();
+  }, [auth]);
 
   const submitHoras = async (hora) => {
     if (hora.id) {
@@ -125,7 +156,6 @@ const HorasExtrasProvider = ({ children }) => {
       setTimeout(() => {
         navigate("/horas-extras");
       }, 1000);
-      
     } catch (error) {
       console.log(error);
     }
@@ -149,6 +179,7 @@ const HorasExtrasProvider = ({ children }) => {
         config
       );
       setHora(data);
+      console.log("Hora:", hora);
     } catch (error) {
       console.log(error);
     }
@@ -172,10 +203,9 @@ const HorasExtrasProvider = ({ children }) => {
         `${import.meta.env.VITE_BACKEND_URL}/horasextras/${id}`,
         config
       );
-      const horasActualizadas = horas.filter(hora => hora._id !== id);
+      const horasActualizadas = horas.filter((hora) => hora._id !== id);
       console.log(horasActualizadas);
 
-      
       Swal.fire(
         "Se eliminó correctamente",
         "Ya puedes visualizar tu nueva hora extra registrada",
@@ -189,6 +219,11 @@ const HorasExtrasProvider = ({ children }) => {
     }
   };
 
+  const cerrarSesionHoras = () => {
+    setHoras([]);
+    setHora({});
+  };
+
   return (
     <HorasExtrasContext.Provider
       value={{
@@ -200,6 +235,8 @@ const HorasExtrasProvider = ({ children }) => {
         obtenerHora,
         cargando,
         eliminarHora,
+        cerrarSesionHoras,
+        TodasHorasExtras
       }}
     >
       {children}

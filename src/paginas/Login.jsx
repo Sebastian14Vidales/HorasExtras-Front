@@ -19,7 +19,7 @@ function Login() {
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const { setAuth } = useAuth();
-
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,6 +47,7 @@ function Login() {
       );
       localStorage.setItem("token", data.token);
       setAuth(data);
+      navigate("/horas-extras");
 
     } catch (error) {
       setAlerta({
