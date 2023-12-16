@@ -27,7 +27,7 @@ function ForgotPassword() {
 
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/usuarios/forgot-password`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/forgot-password`,
         { email }
       );
       

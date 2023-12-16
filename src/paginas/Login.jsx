@@ -39,7 +39,7 @@ function Login() {
     }
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/usuarios/login`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/login`,
         {
           email,
           password,

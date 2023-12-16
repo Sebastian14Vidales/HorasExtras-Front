@@ -14,7 +14,7 @@ function ConfirmAccount() {
     const confirmarCuenta = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/usuarios/confirmar/${id}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/confirmar/${id}`
         );
         Swal.fire("¡Usuario Autenticado!", `${data.msg}`, "success");
         setCuentaConfirmada(true);

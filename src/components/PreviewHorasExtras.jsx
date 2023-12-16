@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import dayjs from "dayjs";
 import "../styles/horasExtras.css";
 import ModalVerRegistro from "./ModalVerRegistro";
 import { Button, useDisclosure } from "@nextui-org/react";
 import useHorasExtras from "../hooks/useHorasExtras";
 import useAdmin from "../hooks/useAdmin";
-// import TodasHorasExtras from "../paginas/TodasHorasExtras";
 
 function PreviewHorasExtras({ horas }) {
   const {
@@ -26,7 +25,7 @@ function PreviewHorasExtras({ horas }) {
     if(confirm('Deseas eliminar este proyecto')) {
       eliminarHora(_id)
     } 
-  }
+  } 
 
   return (
     <div className="bg-white shadow-md mt-5 rounded-lg p-5">

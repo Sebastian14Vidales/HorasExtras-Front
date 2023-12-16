@@ -4,8 +4,10 @@ import { useState, useEffect, createContext } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import dayjs from "dayjs";
+import io from "socket.io-client";
 
-// import dayjs from "dayjs";
+let socket;
 
 const HorasExtrasContext = createContext();
 
@@ -40,7 +42,7 @@ const HorasExtrasProvider = ({ children }) => {
         };
 
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/horasextras`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/horasextras`,
           config
         );
         setHoras(data);
@@ -67,7 +69,7 @@ const HorasExtrasProvider = ({ children }) => {
         };
 
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/horasextras/alluser`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/horasextras/alluser`,
           config
         );
         setTodasHorasExtras(data);
@@ -78,7 +80,12 @@ const HorasExtrasProvider = ({ children }) => {
     };
 
     obtenerTodasHorasExtras();
-  }, [auth]);
+  }, [horas]);
+
+  useEffect(() => {
+    socket = io(import.meta.env.VITE_BACKEND_URL)
+  }, [])
+  
 
   const submitHoras = async (hora) => {
     if (hora.id) {
@@ -86,6 +93,7 @@ const HorasExtrasProvider = ({ children }) => {
       await editarHoraExtra(hora);
     } else {
       await nuevaHoraExtra(hora);
+
     }
 
     return;
@@ -104,7 +112,7 @@ const HorasExtrasProvider = ({ children }) => {
       };
 
       const { data } = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/horasextras/${hora.id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/horasextras/${hora.id}`,
         hora,
         config
       );
@@ -140,22 +148,24 @@ const HorasExtrasProvider = ({ children }) => {
       };
 
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/horasextras`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/horasextras`,
         hora,
         config
       );
-
+      console.log(data);
       setHoras([...horas, data]);
-
       Swal.fire(
         "Se creó correctamente",
         "Ya puedes visualizar tu nueva hora extra registrada",
         "success"
       );
+      // Socket.io
+      socket.emit('nueva_hora', data)
 
       setTimeout(() => {
         navigate("/horas-extras");
       }, 1000);
+
     } catch (error) {
       console.log(error);
     }
@@ -175,7 +185,7 @@ const HorasExtrasProvider = ({ children }) => {
       };
 
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/horasextras/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/horasextras/${id}`,
         config
       );
       setHora(data);
@@ -200,7 +210,7 @@ const HorasExtrasProvider = ({ children }) => {
       };
 
       await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/horasextras/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/horasextras/${id}`,
         config
       );
       const horasActualizadas = horas.filter((hora) => hora._id !== id);
@@ -224,6 +234,48 @@ const HorasExtrasProvider = ({ children }) => {
     setHora({});
   };
 
+  const calcularHorasNocturnasDiurnas = (horas, inicio) => {
+
+    // Inicializar contadores
+    let horasDiurnas = 0;
+    let horasNocturnas = 0;
+
+    // Recorrer cada hora entre las fechas y determinar si es diurna o nocturna
+    for (let i = 0; i < horas; i++) {
+      const horaActual = dayjs(inicio).add(i, "hour").hour();
+
+      // Consideramos como nocturnas las horas después de la hora límite nocturna
+      if (horaActual >= 18 || horaActual < 6) {
+        horasNocturnas++;
+      } else {
+        horasDiurnas++;
+      }
+    }
+
+    const pagoHorasDiurnas = horasDiurnas * 6042;
+    const pagoHorasNocturnas = horasNocturnas * 8458;
+    const valor = pagoHorasDiurnas + pagoHorasNocturnas;
+
+    const totalPago = valor.toLocaleString('es-CO', {
+      style: 'currency',
+      currency: 'COP'
+  });
+    return {
+      horas,
+      horasDiurnas,
+      horasNocturnas,
+      pagoHorasDiurnas,
+      pagoHorasNocturnas,
+      totalPago
+    };
+  };
+
+  // Socket.io
+const submitHorasExtras = (nuevahora) => {
+  setTodasHorasExtras([...TodasHorasExtras,nuevahora])
+  console.log(TodasHorasExtras);
+}
+
   return (
     <HorasExtrasContext.Provider
       value={{
@@ -236,7 +288,9 @@ const HorasExtrasProvider = ({ children }) => {
         cargando,
         eliminarHora,
         cerrarSesionHoras,
-        TodasHorasExtras
+        TodasHorasExtras,
+        calcularHorasNocturnasDiurnas,
+        submitHorasExtras
       }}
     >
       {children}

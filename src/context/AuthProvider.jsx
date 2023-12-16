@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
       };
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/usuarios/perfil`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/perfil`,
           config
         );
 

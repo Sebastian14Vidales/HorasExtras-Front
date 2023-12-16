@@ -49,7 +49,7 @@ function Register() {
     console.log("Creando usuario...");
     try {
       const {data} = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/usuarios`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/usuarios`,
         { nombre, password, email }
       );
       // data proviene del USUARIO-CONTROLLER

@@ -20,7 +20,7 @@ function Sidebar() {
     {admin ? (
       <div>
         <Link
-          to="/alluser"
+          to="/horas-extras"
           className={`w-full p-3 text-[#2b0572] transition-all uppercase font-bold block mt-5 text-center rounded-lg border-b-1 ${activeLink === "/horas-extras" ? 'text-white bg-[#2b0572]': 'hover:text-white hover:bg-[#2b0572]'}`}
         >
           Ver Registros
@@ -35,7 +35,7 @@ function Sidebar() {
           Ver Horas Extras
         </Link>
         <Link
-          to="/crear-hora-extra"
+          to="crear-hora-extra"
           className={`w-full p-3 text-[#2b0572] transition-all uppercase font-bold block mt-5 text-center rounded-lg border-b-1 ${activeLink === "/crear-hora-extra" ? 'text-white bg-[#2b0572]': 'hover:text-white hover:bg-[#2b0572]'}`}
         >
           Registrar Hora Extra
