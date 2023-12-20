@@ -2,14 +2,14 @@ import AllPreviewHorasExtras from "../components/AllPreviewHorasExtras";
 import PreviewHorasExtras from "../components/PreviewHorasExtras";
 import useAdmin from "../hooks/useAdmin";
 import useHorasExtras from "../hooks/useHorasExtras";
-// import AllHorasExtras from "./AllHorasExtras";
 
 function HorasExtras() {
   const { horas, TodasHorasExtras } = useHorasExtras();
   const admin = useAdmin();
+
   return (
     <>
-      <h1 className="text-4xl font-black">Horas Extras</h1>
+      <h1 className="text-4xl font-black"> {admin ? 'Todas Las Horas Extras' : 'Horas Extras'}</h1>
       {admin ? (
         TodasHorasExtras.length ? (
           TodasHorasExtras.map((hora) => <AllPreviewHorasExtras key={hora._id} horas={hora} />)

@@ -3,10 +3,7 @@ import useHorasExtras from "./useHorasExtras";
 
 const useAdmin = () => {
   const { auth } = useAuth();
-  const { hora } = useHorasExtras();
-
-  console.log(auth);
-  console.log(hora);
+  // const { hora } = useHorasExtras();
 
   return auth.email === 'admin@admin.com'
 };

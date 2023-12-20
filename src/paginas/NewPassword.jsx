@@ -28,7 +28,7 @@ function NewPassword() {
         await axios.get(
           `${
             import.meta.env.VITE_BACKEND_URL
-          }/usuarios/forgot-password/${token}`
+          }/api/usuarios/forgot-password/${token}`
         );
         setTokenValido(true);
         
@@ -56,7 +56,7 @@ function NewPassword() {
 
     try {
       const {data} = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/usuarios/forgot-password/${token}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/forgot-password/${token}`,
         { password }
       );
       Swal.fire("¡Se cambió la contraseña!", `${data.msg}`, "success");
