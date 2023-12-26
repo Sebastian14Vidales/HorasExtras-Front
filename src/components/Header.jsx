@@ -9,7 +9,7 @@ function Header() {
   const navigate = useNavigate();
 
   const handleCerrarSesion = () => {
-    console.log('Cerrando Sesión');
+    // console.log('Cerrando Sesión');
     cerrarSesionAuth();
     cerrarSesionHoras();
     localStorage.removeItem("token");

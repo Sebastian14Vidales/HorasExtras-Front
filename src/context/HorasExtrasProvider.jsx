@@ -73,7 +73,7 @@ const HorasExtrasProvider = ({ children }) => {
           config
         );
         setTodasHorasExtras(data);
-        console.log("Todas HORAS EXTRAS: ", TodasHorasExtras);
+        // console.log("Todas HORAS EXTRAS: ", TodasHorasExtras);
         // console.log(data);
       } catch (error) {
         console.log(error);
@@ -153,7 +153,7 @@ const HorasExtrasProvider = ({ children }) => {
         hora,
         config
       );
-      console.log(data);
+      // console.log(data);
       setHoras([...horas, data]);
       Swal.fire(
         "Se creó correctamente",
@@ -189,7 +189,7 @@ const HorasExtrasProvider = ({ children }) => {
         config
       );
       setHora(data);
-      console.log("Hora:", hora);
+      // console.log("Hora:", hora);
     } catch (error) {
       console.log(error);
     }
@@ -271,7 +271,7 @@ const HorasExtrasProvider = ({ children }) => {
   // Socket.io
   const submitHorasExtras = (nuevahora) => {
     setHoras([...horas, nuevahora]);
-    console.log(horas);
+    // console.log(horas);
   };
 
   const eliminarHoraExtra = (horanueva) => {

@@ -28,7 +28,7 @@ function AllPreviewHorasExtras({ horas }) {
 
   const { auth } = useAuth();
   const { submitHorasExtras, eliminarHoraExtra, editarHora } = useHorasExtras();
-  console.log(auth);
+  // console.log(auth);
 
   let socket;
 
@@ -40,7 +40,7 @@ function AllPreviewHorasExtras({ horas }) {
   useEffect(() => {
     if (socket) {
       socket.on("hora_agregada", (hora) => {
-        console.log("Hora recibida:", hora);
+        // console.log("Hora recibida:", hora);
         submitHorasExtras(hora);
       });
       socket.on("hora_eliminada", (hora) => {
