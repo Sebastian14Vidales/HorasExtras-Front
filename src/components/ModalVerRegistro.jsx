@@ -9,12 +9,6 @@ import {
 } from "@nextui-org/react";
 import dayjs from "dayjs";
 import useAdmin from "../hooks/useAdmin";
-import { io } from "socket.io-client";
-import { useEffect } from "react";
-import useAuth from "../hooks/useAuth";
-import useHorasExtras from "../hooks/useHorasExtras";
-
-// import { useState, useEffect } from "react";
 
 function ModalVerRegistro({
   isOpen,
@@ -28,31 +22,8 @@ function ModalVerRegistro({
   resultado,
   _id,
 }) {
+
   const admin = useAdmin();
-  const {auth} = useAuth();
-  const {submitHorasExtras} = useHorasExtras();
-  console.log(auth);
-  
-  // let socket;
-  
-  useEffect(() => {
-    const socket = io(import.meta.env.VITE_BACKEND_URL);
-    socket.emit("ver_registro", auth._id);
-  },[]); // Se ejecuta una vez al montar el componente para inicializar el socket
-  
-  useEffect(() => {
-    // if (socket) {
-      console.log("SOCKET");
-      const socket = io(import.meta.env.VITE_BACKEND_URL);
-      socket.on("hora_agregada", (hora) => {
-        if(admin) {
-          console.log("Hora recibida:", hora);
-          submitHorasExtras(hora)
-        }
-        // Manejar los datos recibidos en 'hora_agregada' según sea necesario
-      });
-    // }
-  });
 
   return (
     <>

@@ -4,7 +4,6 @@ import "../styles/horasExtras.css";
 import ModalVerRegistro from "./ModalVerRegistro";
 import { Button, useDisclosure } from "@nextui-org/react";
 import useHorasExtras from "../hooks/useHorasExtras";
-// import useAdmin from "../hooks/useAdmin";
 
 function PreviewHorasExtras({ horas }) {
   const {
@@ -18,9 +17,6 @@ function PreviewHorasExtras({ horas }) {
 
   const { eliminarHora } = useHorasExtras();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  // const admin = useAdmin();
-  // console.log(admin);
-
 
   const handleClick =  () => {
     if(confirm('Deseas eliminar este proyecto')) {

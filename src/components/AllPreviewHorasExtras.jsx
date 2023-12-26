@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/horasExtras.css";
 import ModalVerRegistro from "./ModalVerRegistro";
 import { Button, useDisclosure } from "@nextui-org/react";
 import useHorasExtras from "../hooks/useHorasExtras";
+import { io } from "socket.io-client";
+import useAuth from "../hooks/useAuth";
 
 function AllPreviewHorasExtras({ horas }) {
   const {
@@ -14,17 +16,42 @@ function AllPreviewHorasExtras({ horas }) {
     creador,
     _id,
   } = horas;
-  console.log("HORAS: ",horas);
 
-  const { calcularHorasNocturnasDiurnas } =
-    useHorasExtras();
+  // let socket;
+  const { calcularHorasNocturnasDiurnas } = useHorasExtras();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const resultado = calcularHorasNocturnasDiurnas(
     horasTotal,
     fechaHoraInicio,
     fechaHoraFin
   );
-  
+
+  const { auth } = useAuth();
+  const { submitHorasExtras, eliminarHoraExtra, editarHora } = useHorasExtras();
+  console.log(auth);
+
+  let socket;
+
+  useEffect(() => {
+    socket = io(import.meta.env.VITE_BACKEND_URL);
+    socket.emit("ver_registro", auth._id);
+  }, []); // Se ejecuta una vez al montar el componente para inicializar el socket
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("hora_agregada", (hora) => {
+        console.log("Hora recibida:", hora);
+        submitHorasExtras(hora);
+      });
+      socket.on("hora_eliminada", (hora) => {
+        eliminarHoraExtra(hora);
+      });
+
+      socket.on("hora_editada", (hora) => {
+        editarHora(hora);
+      });
+    }
+  });
 
   return (
     <div className="bg-white shadow-md transition-all mt-5 rounded-lg p-5">

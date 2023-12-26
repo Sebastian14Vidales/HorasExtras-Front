@@ -12,7 +12,7 @@ function EditarHoraExtra() {
     obtenerHora(params.id);
   }, []);
 
-  const { asunto, descripcion, fechaHoraInicio, fechaHoraFin } = hora;
+  const { asunto } = hora;
   return cargando ? (
     <Cargando />
   ) : (

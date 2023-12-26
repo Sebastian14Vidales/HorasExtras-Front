@@ -65,6 +65,7 @@ function FormularioHora() {
     setDescripcion("");
     setFechaHoraInicio("");
     setFechaHoraFin("");
+    setId("");
   };
 
   const { msg } = alerta;

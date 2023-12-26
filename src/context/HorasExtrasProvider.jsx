@@ -73,7 +73,7 @@ const HorasExtrasProvider = ({ children }) => {
           config
         );
         setTodasHorasExtras(data);
-        console.log("Todas HORAS EXTRAS: ",TodasHorasExtras);
+        console.log("Todas HORAS EXTRAS: ", TodasHorasExtras);
         // console.log(data);
       } catch (error) {
         console.log(error);
@@ -84,9 +84,8 @@ const HorasExtrasProvider = ({ children }) => {
   }, [horas]);
 
   useEffect(() => {
-    socket = io(import.meta.env.VITE_BACKEND_URL)
-  }, [])
-  
+    socket = io(import.meta.env.VITE_BACKEND_URL);
+  }, []);
 
   const submitHoras = async (hora) => {
     if (hora.id) {
@@ -94,7 +93,6 @@ const HorasExtrasProvider = ({ children }) => {
       await editarHoraExtra(hora);
     } else {
       await nuevaHoraExtra(hora);
-
     }
 
     return;
@@ -123,6 +121,8 @@ const HorasExtrasProvider = ({ children }) => {
         horaState._id === data._id ? data : horaState
       );
       setHoras(horasActualizadas);
+      setHora({})
+      socket.emit("editar_hora", hora);
 
       Swal.fire(
         "Se actualizó correctamente",
@@ -161,12 +161,11 @@ const HorasExtrasProvider = ({ children }) => {
         "success"
       );
       // Socket.io
-      socket.emit('nueva_hora', data)
+      socket.emit("nueva_hora", data);
 
       setTimeout(() => {
         navigate("/horas-extras");
       }, 1000);
-
     } catch (error) {
       console.log(error);
     }
@@ -194,7 +193,7 @@ const HorasExtrasProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-
+    
     setCargando(false);
   };
 
@@ -214,17 +213,16 @@ const HorasExtrasProvider = ({ children }) => {
         `${import.meta.env.VITE_BACKEND_URL}/api/horasextras/${id}`,
         config
       );
+      // SOCKET
       const horasActualizadas = horas.filter((hora) => hora._id !== id);
-      // console.log(horasActualizadas);
+      setHoras(horasActualizadas);
+      socket.emit("eliminar_hora", hora);
 
       Swal.fire(
         "Se eliminó correctamente",
         "Ya puedes visualizar tu nueva hora extra registrada",
         "success"
       );
-      setTimeout(() => {
-        setHoras(horasActualizadas);
-      }, 1000);
     } catch (error) {
       console.log(error);
     }
@@ -236,7 +234,6 @@ const HorasExtrasProvider = ({ children }) => {
   };
 
   const calcularHorasNocturnasDiurnas = (horas, inicio) => {
-
     // Inicializar contadores
     let horasDiurnas = 0;
     let horasNocturnas = 0;
@@ -257,25 +254,39 @@ const HorasExtrasProvider = ({ children }) => {
     const pagoHorasNocturnas = horasNocturnas * 8458;
     const valor = pagoHorasDiurnas + pagoHorasNocturnas;
 
-    const totalPago = valor.toLocaleString('es-CO', {
-      style: 'currency',
-      currency: 'COP'
-  });
+    const totalPago = valor.toLocaleString("es-CO", {
+      style: "currency",
+      currency: "COP",
+    });
     return {
       horas,
       horasDiurnas,
       horasNocturnas,
       pagoHorasDiurnas,
       pagoHorasNocturnas,
-      totalPago
+      totalPago,
     };
   };
 
   // Socket.io
-const submitHorasExtras = (nuevahora) => {
-  setHoras([...horas, nuevahora]);
-  console.log(horas);
-}
+  const submitHorasExtras = (nuevahora) => {
+    setHoras([...horas, nuevahora]);
+    console.log(horas);
+  };
+
+  const eliminarHoraExtra = (horanueva) => {
+    const horasActualizadas = horas.filter(
+      (horaState) => horaState._id !== horanueva.id
+    );
+    setHoras(horasActualizadas);
+  };
+
+  const editarHora = (horanueva) => {
+    const horasActualizadas = horas.map((horaState) =>
+      horaState._id === horanueva._id ? horanueva : horaState
+    );
+    setHoras(horasActualizadas);
+  };
 
   return (
     <HorasExtrasContext.Provider
@@ -291,7 +302,9 @@ const submitHorasExtras = (nuevahora) => {
         cerrarSesionHoras,
         TodasHorasExtras,
         calcularHorasNocturnasDiurnas,
-        submitHorasExtras
+        submitHorasExtras,
+        eliminarHoraExtra,
+        editarHora
       }}
     >
       {children}
